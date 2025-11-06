@@ -30,7 +30,12 @@ class Utilisateur {
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":login", $this->uti_login);
         $stmt->bindParam(":mdp", $this->uti_mdp);
-        $stmt->bindParam(":idcompte", $this->uti_idcompte);
+        $query_idcompte = "SELECT MAX(uti_idcompte) as max_id FROM " . $this->table;
+            $stmt_idcompte = $this->conn->prepare($query_idcompte);
+            $stmt_idcompte->execute();
+            $result = $stmt_idcompte->fetch(PDO::FETCH_ASSOC);
+            $idcompte = ($result['max_id'] ?? 0) + 1;
+            $stmt->bindParam(":idcompte", $idcompte);
         $stmt->bindParam(":mail", $this->uti_mail);
         return $stmt->execute();
     }
@@ -60,6 +65,37 @@ class Utilisateur {
         $stmt->bindParam(":id", $this->uti_idutilisateur);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    // Récupère un utilisateur par son login
+    public function getUser($login) {
+        $query = "SELECT * FROM " . $this->table . " WHERE uti_login = ? LIMIT 0,1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([$login]);
+        return $stmt->fetch(PDO::FETCH_OBJ);
+    }
+
+    // Met a jour la date de dernière connexion
+    public function updateLastConnection($idutilisateur) {
+        $query = "UPDATE " . $this->table . " SET uti_date_connexion = NOW() WHERE uti_idutilisateur = ?";
+        $stmt = $this->conn->prepare($query);
+        return $stmt->execute([$idutilisateur]);
+    }
+
+    public function createUser($login, $email, $hashedPassword) {
+        $query = "INSERT INTO " . $this->table . " (uti_login, uti_mail, uti_mdp, uti_idcompte, uti_date_creation) 
+                  VALUES (:login, :mail, :mdp, :idcompte, NOW())";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":login", $login);
+        $stmt->bindParam(":mail", $email);
+        $stmt->bindParam(":mdp", $hashedPassword);
+        $query_idcompte = "SELECT MAX(uti_idcompte) as max_id FROM " . $this->table;
+        $stmt_idcompte = $this->conn->prepare($query_idcompte);
+        $stmt_idcompte->execute();
+        $result = $stmt_idcompte->fetch(PDO::FETCH_ASSOC);
+        $idcompte = ($result['max_id'] ?? 0) + 1;
+        $stmt->bindParam(":idcompte", $idcompte);
+        return $stmt->execute();
     }
 
     // Vérifie si le login existe déjà (au moment de la création)

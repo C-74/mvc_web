@@ -3,7 +3,6 @@
 $login_val = $_POST['login'] ?? '';
 $mdp_val = '';
 $mdp_conf_val = '';
-$idcompte_val = $_POST['idcompte'] ?? '';
 $mail_val = $_POST['mail'] ?? '';
 ?>
 
@@ -42,9 +41,6 @@ $mail_val = $_POST['mail'] ?? '';
 
         <label>Mail :</label>
         <input type="text" name="mail" required value="<?= htmlspecialchars($mail_val) ?>">
-
-        <label>ID Compte :</label>
-        <input type="number" name="idcompte" min="1" required value="<?= htmlspecialchars($idcompte_val) ?>">
 
         <br>
 

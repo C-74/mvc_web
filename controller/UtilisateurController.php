@@ -15,6 +15,7 @@ class UtilisateurController {
         $utilisateurs = $this->model->lireTous();
         include __DIR__ . '/../view/utilisateur_liste.php';
     }
+    
 
     public function create() {
         $erreur = ''; // Pour stocker les messages d'erreur
@@ -22,22 +23,18 @@ class UtilisateurController {
         $mdp_val = $_POST['mdp'] ?? '';
         $mdp_conf_val = $_POST['mdp_conf'] ?? '';
         $mail_val = $_POST['mail'] ?? '';
-        $idcompte_val = $_POST['idcompte'] ?? '';
 
         if ($_POST) {
             $login = trim($_POST['login']);
             $mdp = trim($_POST['mdp']);
             $mdp_conf = trim($_POST['mdp_conf'] ?? '');
             $mail = trim($_POST['mail']);
-            $idcompte = $_POST['idcompte'];
 
             // Validation côté serveur
             if ($login === '' || $mdp === '' || $mail === '' || preg_match('/\s/', $login.$mdp.$mail)) {
                 $erreur = "Tous les champs doivent être remplis et ne doivent pas contenir d'espaces.";
             } elseif (!preg_match("/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/", $mail)) {
                 $erreur = "Email invalide. Veuillez entrer un email de type exemple@exemple.com.";
-            } elseif (!preg_match('/^[1-9]\d*$/', $idcompte)) {
-                $erreur = "ID Compte invalide, il doit être un entier positif sans symboles.";
             } elseif ($this->model->loginExiste($login)) {
                 $erreur = "Ce login est déjà utilisé.";
             } elseif (strlen($mdp) < 8) {
@@ -46,15 +43,12 @@ class UtilisateurController {
                 $erreur = "Les mots de passe ne correspondent pas.";
             } elseif ($this->model->mailExiste($mail)) {
                 $erreur = "Cet email est déjà utilisé.";
-            } elseif ($this->model->idCompteExiste($idcompte)) {
-                $erreur = "Cet ID Compte est déjà utilisé.";
             }
 
             // Si pas d'erreur, insertion
             if ($erreur === '') {
                 $this->model->uti_login = $login;
                 $this->model->uti_mdp = password_hash($mdp, PASSWORD_DEFAULT);
-                $this->model->uti_idcompte = $idcompte;
                 $this->model->uti_mail = $mail;
                 $this->model->creer();
                 header("Location: index.php?action=utilisateurs");
