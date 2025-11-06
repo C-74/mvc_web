@@ -21,6 +21,16 @@ switch($action) {
         $controller = new AuthController();
         $controller->login();
         break;
+
+    case 'register':
+        if (isset($_SESSION['user'])) {
+            header('Location: index.php');
+            exit();
+        }
+        $controller = new AuthController();
+        // Vous devrez implémenter la méthode register dans AuthController
+        $controller->register();
+        break;
     
     case 'logout':
         $controller = new AuthController();

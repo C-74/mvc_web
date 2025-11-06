@@ -77,6 +77,22 @@ class Utilisateur {
         return $stmt->execute([$idutilisateur]);
     }
 
+    public function createUser($login, $email, $hashedPassword) {
+        $query = "INSERT INTO " . $this->table . " (uti_login, uti_mail, uti_mdp, uti_idcompte, uti_date_creation) 
+                  VALUES (:login, :mail, :mdp, :idcompte, NOW())";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":login", $login);
+        $stmt->bindParam(":mail", $email);
+        $stmt->bindParam(":mdp", $hashedPassword);
+        $query_idcompte = "SELECT MAX(uti_idcompte) as max_id FROM " . $this->table;
+        $stmt_idcompte = $this->conn->prepare($query_idcompte);
+        $stmt_idcompte->execute();
+        $result = $stmt_idcompte->fetch(PDO::FETCH_ASSOC);
+        $idcompte = ($result['max_id'] ?? 0) + 1;
+        $stmt->bindParam(":idcompte", $idcompte);
+        return $stmt->execute();
+    }
+
     // Vérifie si le login existe déjà (au moment de la création)
     public function loginExiste($login) {
         $query = "SELECT COUNT(*) FROM t_utilisateur_uti WHERE uti_login = ?";
