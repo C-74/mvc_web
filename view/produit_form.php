@@ -5,7 +5,10 @@ $designation_val = $_POST['designation'] ?? '';
 $prix_val = $_POST['prix'] ?? '';
 $date_arrive_val = $_POST['date_arrive'] ?? '';
 $stock_val = $_POST['stock'] ?? '';
+$type=file_get_contents("typeProduits.json");
+$listType=json_decode($type,true);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -31,11 +34,17 @@ $stock_val = $_POST['stock'] ?? '';
     <?php endif; ?>
 
     <form method="POST" novalidate>
-        <label>Type :</label>
-        <input type="text" name="type" required value="<?= htmlspecialchars($type_val) ?>">
-
         <label>Désignation :</label>
         <input type="text" name="designation" required value="<?= htmlspecialchars($designation_val) ?>">
+
+        <label>Désignation :</label>
+        <select name="type" required>
+            <?php
+            foreach ($listType as $type) {
+                echo '<option value="' . htmlspecialchars($type['categorie']) . '">' . htmlspecialchars($type['categorie']) . '</option>';
+            }
+            ?>
+        </select>
 
         <label>Prix HT :</label>
         <input type="number" step="0.01" min="0.01" name="prix" id="prix" required 
