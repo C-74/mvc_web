@@ -33,4 +33,4 @@ INSERT INTO `web_m1_s1`.`t_produit_pro`
 
 INSERT INTO `web_m1_s1`.`t_utilisateur_uti`
 (`uti_login`, `uti_mdp`, `uti_idcompte`, `uti_mail`, `uti_admin`) VALUES
-('admin', 'adminpasshash', 1, 'admin@example.com', TRUE);
+('admin', '$2a$04$4y06XLqBFP25inoUCt4sQeEDZuVs.EtLKE4GKhP4t.bMngHMlzBaW', 1, 'admin@example.com', TRUE);
