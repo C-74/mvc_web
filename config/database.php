@@ -1,10 +1,21 @@
 <?php
 class Database {
-    private $host = "localhost";
-    private $db_name = "web_m1_s1";
-    private $username = "root";
-    private $password = "TonNouveauMDP123!";
+    // Informations de connexion
+    private $host;
+    private $db_name;
+    private $username;
+    private $password;
     public $conn;
+
+    public function __construct() {
+        // importation du fichier de connexion a la database
+        $env = parse_ini_file(__DIR__ . '/../.env');
+        
+        $this->host = $env['DB_HOST'];
+        $this->db_name = $env['DB_NAME'];
+        $this->username = $env['DB_USERNAME'];
+        $this->password = $env['DB_PASSWORD'];
+    }
 
     public function getConnection() {
         $this->conn = null;
