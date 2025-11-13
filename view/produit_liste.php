@@ -18,7 +18,10 @@
 </head>
 <body>
     <h1>Liste des produits</h1>
+    <?php if ($_SESSION['user']->uti_admin):
+    ?>
     <a href="index.php?action=produits&subaction=create" class="btn create">Ajouter un produit</a>
+    <?php endif; ?>
     <a href="index.php" class="btn accueil">Accueil</a>
     <table>
         <tr>
@@ -29,7 +32,11 @@
             <th>Date arrivée</th>
             <th>Timestamp arrivée</th>
             <th>Stock</th>
-            <th>Actions</th>
+            <?php if ($_SESSION['user']->uti_admin):
+            ?>
+                <th>Actions</th>
+            <?php endif; ?>
+
         </tr>
         <?php while ($row = $produits->fetch(PDO::FETCH_ASSOC)) : ?>
         <tr>
@@ -40,10 +47,13 @@
             <td><?= $row['pro_date_arrive'] ?></td>
             <td><?= $row['pro_timestamp_arrive'] ?></td>
             <td><?= $row['pro_stock'] ?></td>
+            <?php if ($_SESSION['user']->uti_admin):
+            ?>
             <td>
                 <a href="index.php?action=produits&subaction=edit&id=<?= $row['pro_idproduit'] ?>" class="btn edit">✏️</a>
                 <a href="index.php?action=produits&subaction=delete&id=<?= $row['pro_idproduit'] ?>" class="btn delete" onclick="return confirm('Supprimer ce produit ?')">🗑️</a>
             </td>
+            <?php endif; ?>
         </tr>
         <?php endwhile; ?>
     </table>
