@@ -18,10 +18,14 @@
 </head>
 <body>
     <h1>Liste des produits</h1>
+    <?php if ($_SESSION['user']->uti_admin):
+    ?>
     <a href="index.php?action=produits&subaction=create" class="btn create">Ajouter un produit</a>
+    <?php endif; ?>
     <a href="index.php" class="btn accueil">Accueil</a>
     <table>
         <tr>
+            <th>Image</th>
             <th>ID</th>
             <th>Type</th>
             <th>Désignation</th>
@@ -29,23 +33,69 @@
             <th>Date arrivée</th>
             <th>Timestamp arrivée</th>
             <th>Stock</th>
-            <th>Actions</th>
+            <?php if ($_SESSION['user']->uti_admin):
+            ?>
+                <th>Actions</th>
+            <?php endif; ?>
+
         </tr>
         <?php while ($row = $produits->fetch(PDO::FETCH_ASSOC)) : ?>
         <tr>
+            <td>
+                <?php
+                // Si pro_image est renseigné, on l’utilise.
+                // Sinon, on affiche une image commune.
+                $imageSrc = !empty($row['pro_image'])
+                    ? $row['pro_image']
+                    : 'uploads/default.jpeg'; // à créer une fois pour toutes
+                ?>
+                <img src="<?= htmlspecialchars($imageSrc) ?>"
+                     alt="Image produit"
+                     style="max-width: 80px; max-height: 80px; object-fit: cover;">
+            </td>
+            
             <td><?= $row['pro_idproduit'] ?></td>
             <td><?= htmlspecialchars($row['pro_type']) ?></td>
             <td><?= htmlspecialchars($row['pro_designation']) ?></td>
-            <td><?= number_format($row['pro_prix_ht'], 2, ',', ' ') ?> €</td>
+
+            <td>
+                <?php if (!empty($row['pro_promo'])) : ?>
+                    <!-- Ancien prix barré en gris -->
+                    <span style="text-decoration: line-through; color: grey;">
+                        <?= number_format($row['pro_prix_ht'], 2, ',', ' ') ?> €
+                    </span>
+                    <br>
+                    <!-- Nouveau prix remisé -->
+                    <span style="color: red;">
+                        <?php
+                        $prixRemise = $row['pro_prix_ht'] * (1 - $row['pro_promo'] / 100);
+                        echo number_format($prixRemise, 2, ',', ' ');
+                        ?> €
+                    </span>
+                <?php else : ?>
+                    <!-- Pas de promo : prix normal -->
+                    <?= number_format($row['pro_prix_ht'], 2, ',', ' ') ?> €
+                <?php endif; ?>
+            </td>
+
+
             <td><?= $row['pro_date_arrive'] ?></td>
             <td><?= $row['pro_timestamp_arrive'] ?></td>
             <td><?= $row['pro_stock'] ?></td>
+            <?php if ($_SESSION['user']->uti_admin):
+            ?>
             <td>
                 <a href="index.php?action=produits&subaction=edit&id=<?= $row['pro_idproduit'] ?>" class="btn edit">✏️</a>
                 <a href="index.php?action=produits&subaction=delete&id=<?= $row['pro_idproduit'] ?>" class="btn delete" onclick="return confirm('Supprimer ce produit ?')">🗑️</a>
             </td>
+            <?php endif; ?>
         </tr>
         <?php endwhile; ?>
     </table>
 </body>
 </html>
+
+
+
+to_replace_ = list(["Doorman Entry", "Elevator in building" , "Internet" , "Firm matress", "Other pet(s)", "Smart lock", "Wide clearance to bed", "Wide clearance to shower & toilet", "Wide clearance to shower and toilet", "translation missing: en.hosting_amenity_49", "translation missing: en.hosting_amenity_50", "Waterfront", "Other"])
+replace_ = list(["Doorman", "Elevator", "Ethernet connection" , "Firm mattress", "Pets allowed",  "Smartlock" , "Wide clearance", "Wide clearance", "Wide clearance", "translation missing", "translation missing", "Beachfront"], "Others"])
