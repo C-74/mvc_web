@@ -97,5 +97,3 @@
 
 
 
-to_replace_ = list(["Doorman Entry", "Elevator in building" , "Internet" , "Firm matress", "Other pet(s)", "Smart lock", "Wide clearance to bed", "Wide clearance to shower & toilet", "Wide clearance to shower and toilet", "translation missing: en.hosting_amenity_49", "translation missing: en.hosting_amenity_50", "Waterfront", "Other"])
-replace_ = list(["Doorman", "Elevator", "Ethernet connection" , "Firm mattress", "Pets allowed",  "Smartlock" , "Wide clearance", "Wide clearance", "Wide clearance", "translation missing", "translation missing", "Beachfront"], "Others"])
