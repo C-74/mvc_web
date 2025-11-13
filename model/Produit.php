@@ -10,6 +10,8 @@ class Produit {
     public $pro_date_arrive;
     public $pro_timestamp_arrive;
     public $pro_stock;
+    public $pro_promo;
+    public $pro_image;
 
     public function __construct($db) {
         $this->conn = $db;
@@ -24,27 +26,31 @@ class Produit {
 
     public function creer() {
         $query = "INSERT INTO " . $this->table . "
-                  (pro_type, pro_designation, pro_prix_ht, pro_date_arrive, pro_stock)
-                  VALUES (:type, :designation, :prix, :date_arrive, :stock)";
+                  (pro_type, pro_designation, pro_prix_ht, pro_promo, pro_date_arrive, pro_stock, pro_image)
+                  VALUES (:type, :designation, :prix, :promo, :date_arrive, :stock, :image)";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":type", $this->pro_type);
         $stmt->bindParam(":designation", $this->pro_designation);
         $stmt->bindParam(":prix", $this->pro_prix_ht);
+        $stmt->bindParam(":promo", $this->pro_promo);
         $stmt->bindParam(":date_arrive", $this->pro_date_arrive);
         $stmt->bindParam(":stock", $this->pro_stock);
+        $stmt->bindParam(":image", $this->pro_image);
         return $stmt->execute();
     }
 
     public function modifier() {
         $query = "UPDATE " . $this->table . "
-                  SET pro_type=:type, pro_designation=:designation, pro_prix_ht=:prix, pro_date_arrive=:date_arrive, pro_stock=:stock
+                  SET pro_type=:type, pro_designation=:designation, pro_prix_ht=:prix, pro_promo=:promo, pro_date_arrive=:date_arrive, pro_stock=:stock, pro_image=:image
                   WHERE pro_idproduit=:id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":type", $this->pro_type);
         $stmt->bindParam(":designation", $this->pro_designation);
         $stmt->bindParam(":prix", $this->pro_prix_ht);
+        $stmt->bindParam(":promo", $this->pro_promo);
         $stmt->bindParam(":date_arrive", $this->pro_date_arrive);
         $stmt->bindParam(":stock", $this->pro_stock);
+        $stmt->bindParam(":image", $this->pro_image);
         $stmt->bindParam(":id", $this->pro_idproduit);
         return $stmt->execute();
     }
