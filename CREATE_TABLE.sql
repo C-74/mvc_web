@@ -31,6 +31,8 @@ INSERT INTO `web_m1_s1`.`t_produit_pro`
 ('Électroménager', 'Aspirateur Dyson V15 Detect', 649.00, 0.00, '2025-08-10', 18, ''),
 ('Mobilier', 'Chaise de bureau ergonomique', 199.99, 15.00, '2025-11-01', 30, '');
 
+
+-- Le mdp est "password"
 INSERT INTO `web_m1_s1`.`t_utilisateur_uti`
 (`uti_login`, `uti_mdp`, `uti_idcompte`, `uti_mail`, `uti_admin`) VALUES
-('admin', 'adminpasshash', 1, 'admin@example.com', TRUE);
+('admin', '$2a$04$/QGQHlV.Z.t13Hsc.rfiXuhwHNkKYOdjCwPURDN1Yn0VS9zUoeDCG', 1, 'admin@example.com', TRUE);

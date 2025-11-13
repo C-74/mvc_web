@@ -43,9 +43,18 @@ switch($action) {
         $subaction = $_GET['subaction'] ?? 'index';
         $id = $_GET['id'] ?? null;
         switch($subaction) {
-            case 'create': $controller->create(); break;
-            case 'edit': $controller->edit($id); break;
-            case 'delete': $controller->delete($id); break;
+            case 'create': 
+            requireAdmin(); // Vérifie si l'utilisateur est admin
+            $controller->create(); 
+            break;
+            case 'edit': 
+            requireAdmin(); // Vérifie si l'utilisateur est admin
+            $controller->edit($id); 
+            break;
+            case 'delete': 
+            requireAdmin(); // Vérifie si l'utilisateur est admin
+            $controller->delete($id); 
+            break;
             default: $controller->index(); break;
         }
         break;
@@ -56,10 +65,21 @@ switch($action) {
         $subaction = $_GET['subaction'] ?? 'index';
         $id = $_GET['id'] ?? null;
         switch($subaction) {
-            case 'create': $controller->create(); break;
-            case 'edit': $controller->edit($id); break;
-            case 'delete': $controller->delete($id); break;
-            default: $controller->index(); break;
+            case 'create': 
+            requireAdmin(); // Vérifie si l'utilisateur est admin
+            $controller->create(); 
+            break;
+            case 'edit': 
+            requireAdmin(); // Vérifie si l'utilisateur est admin
+            $controller->edit($id); 
+            break;
+            case 'delete': 
+            requireAdmin(); // Vérifie si l'utilisateur est admin
+            $controller->delete($id); 
+            break;
+            default: 
+            $controller->index(); 
+            break;
         }
         break;
 

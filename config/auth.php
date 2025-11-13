@@ -7,3 +7,12 @@ function requireAuth() {
         exit;
     }
 }
+
+// Fonction pour vérifier si l'user est admin
+function requireAdmin() {
+    if (!isset($_SESSION['user']) || !$_SESSION['user']->uti_admin) {
+        // Si il n'est pas admin, on le redirige vers la page d'accueil
+        header("Location: index.php");
+        exit;
+    }
+}
