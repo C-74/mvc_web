@@ -61,7 +61,7 @@ $listType = json_decode($type, true);
 
         <label>Date d'arrivée :</label>
         <input type="date" name="date_arrive" required value="<?= $produit['pro_date_arrive'] ?>"
-            max="<?= date('Y-m-d') ?>">
+            min="<?= date('Y-m-d') ?>">
 
         <label>Stock :</label>
         <input type="number" name="stock" min="1" required value="<?= $produit['pro_stock'] ?>">
