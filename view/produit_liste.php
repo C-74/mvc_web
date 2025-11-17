@@ -25,6 +25,40 @@
     <a href="index.php?action=produits&subaction=create" class="btn create">Ajouter un produit</a>
     <?php endif; ?>
     <a href="index.php" class="btn accueil">Accueil</a>
+
+    <!-- Filtre par type -->
+    <div style="margin: 20px 0; padding: 15px; background-color: #f8f9fa; border-radius: 5px;">
+        <form method="GET" action="index.php" style="display: inline-flex; align-items: center; gap: 10px;">
+            <input type="hidden" name="action" value="produits">
+            <label for="type" style="font-weight: bold;">Filtrer par type :</label>
+            <select name="type" id="type" style="padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+                <option value="">-- Tous les types --</option>
+                <?php
+                $typesArray = $typesDisponibles->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($typesArray as $typeOption):
+                ?>
+                    <option value="<?= htmlspecialchars($typeOption['pro_type']) ?>"
+                            <?= ($typeFiltre === $typeOption['pro_type']) ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($typeOption['pro_type']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+            <button type="submit" style="padding: 8px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                Filtrer
+            </button>
+            <?php if ($typeFiltre !== ''): ?>
+                <a href="index.php?action=produits" style="padding: 8px 15px; background-color: #6c757d; color: white; text-decoration: none; border-radius: 4px;">
+                    Réinitialiser
+                </a>
+            <?php endif; ?>
+        </form>
+        <?php if ($typeFiltre !== ''): ?>
+            <p style="margin-top: 10px; color: #495057;">
+                <strong>Filtre actif :</strong> <?= htmlspecialchars($typeFiltre) ?>
+            </p>
+        <?php endif; ?>
+    </div>
+
     <table>
         <thead>
             <tr>

@@ -28,6 +28,21 @@ class Produit {
         return $stmt;
     }
 
+    public function lireParType($type) {
+        $query = "SELECT * FROM " . $this->table . " WHERE pro_type = :type ORDER BY pro_idproduit ASC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":type", $type);
+        $stmt->execute();
+        return $stmt;
+    }
+
+    public function lireTypes() {
+        $query = "SELECT DISTINCT pro_type FROM " . $this->table . " ORDER BY pro_type ASC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt;
+    }
+
     public function creer() {
         $query = "INSERT INTO " . $this->table . "
                   (pro_type, pro_designation, pro_prix_ht, pro_promo, pro_date_arrive, pro_stock, pro_image)

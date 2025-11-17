@@ -8,7 +8,7 @@ CREATE TABLE `web_m1_s1`.`t_utilisateur_uti` (
     `uti_date_connexion` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `uti_admin` BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY (`uti_idutilisateur`)
-) ENGINE = InnoDB;
+) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `web_m1_s1`.`t_produit_pro` (
     `pro_idproduit` INT NOT NULL AUTO_INCREMENT,
@@ -21,7 +21,7 @@ CREATE TABLE `web_m1_s1`.`t_produit_pro` (
     `pro_stock` INT DEFAULT 0,
     `pro_image` VARCHAR(255) DEFAULT NULL,
     PRIMARY KEY (`pro_idproduit`)
-) ENGINE = InnoDB;
+) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Table historique pour l'historique des prix
 CREATE TABLE `web_m1_s1`.`t_historique_prix_hpr` (
@@ -33,7 +33,7 @@ CREATE TABLE `web_m1_s1`.`t_historique_prix_hpr` (
     FOREIGN KEY (`hpr_idproduit`) REFERENCES `web_m1_s1`.`t_produit_pro`(`pro_idproduit`)
     ON DELETE CASCADE
     ON UPDATE CASCADE
-) ENGINE = InnoDB;
+) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `web_m1_s1`.`t_produit_pro`
 (`pro_type`, `pro_designation`, `pro_prix_ht`, `pro_promo`, `pro_date_arrive`, `pro_stock`, `pro_image`) VALUES

@@ -13,7 +13,15 @@ class ProduitController {
     }
 
     public function index() {
-        $produits = $this->model->lireTous();
+        $typeFiltre = $_GET['type'] ?? '';
+        $typesDisponibles = $this->model->lireTypes();
+
+        if ($typeFiltre !== '') {
+            $produits = $this->model->lireParType($typeFiltre);
+        } else {
+            $produits = $this->model->lireTous();
+        }
+
         $historique = new Historique($this->model->getDbConnection());
         $historiquePrix = $historique->lireTous();
         include __DIR__ . '/../view/produit_liste.php';
