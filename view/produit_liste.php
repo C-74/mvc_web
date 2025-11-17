@@ -15,7 +15,11 @@
         .create { background-color: #28a745; }
         .edit { background-color: #007bff; }
         .delete { background-color: #dc3545; }
+        .panier { background-color: #ffc107; color: #333; }
+        .add-cart { background-color: #17a2b8; }
         a.btn:hover { opacity: 0.8; }
+        button.btn:hover { opacity: 0.8; }
+        .cart-badge { background: #dc3545; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8em; }
     </style>
 </head>
 <body>
@@ -25,6 +29,19 @@
     <a href="index.php?action=produits&subaction=create" class="btn create">Ajouter un produit</a>
     <?php endif; ?>
     <a href="index.php" class="btn accueil">Accueil</a>
+    <?php
+    require_once __DIR__ . '/../model/Panier.php';
+    require_once __DIR__ . '/../config/database.php';
+    $databasePanier = new Database();
+    $panierTemp = new Panier($databasePanier->getConnection());
+    $nbArticles = $panierTemp->getNombreArticles();
+    ?>
+    <a href="index.php?action=panier" class="btn panier">
+        🛒 Mon Panier
+        <?php if ($nbArticles > 0): ?>
+            <span class="cart-badge"><?= $nbArticles ?></span>
+        <?php endif; ?>
+    </a>
 
     <!-- Filtre par type -->
     <div style="margin: 20px 0; padding: 15px; background-color: #f8f9fa; border-radius: 5px;">
@@ -70,6 +87,7 @@
                 <th class="sortable" data-type="date">Date arrivée <span class="sort-arrow">▲</span></th>
                 <th class="sortable" data-type="number">Timestamp arrivée <span class="sort-arrow">▲</span></th>
                 <th class="sortable" data-type="number">Stock <span class="sort-arrow">▲</span></th>
+                <th>Panier</th>
                 <?php if ($_SESSION['user']->uti_admin): ?>
                     <th>Actions</th>
                 <?php endif; ?>
@@ -141,6 +159,18 @@
             <td><?= $row['pro_date_arrive'] ?></td>
             <td><?= $row['pro_timestamp_arrive'] ?></td>
             <td><?= $row['pro_stock'] ?></td>
+            <td>
+                <?php if ($row['pro_stock'] > 0): ?>
+                    <form method="POST" action="index.php?action=panier&subaction=ajouter" style="display: inline;">
+                        <input type="hidden" name="id_produit" value="<?= $row['pro_idproduit'] ?>">
+                        <input type="hidden" name="redirect" value="index.php?action=produits<?= $typeFiltre ? '&type=' . urlencode($typeFiltre) : '' ?>">
+                        <input type="number" name="quantite" value="1" min="1" max="<?= $row['pro_stock'] ?>" style="width: 60px; padding: 5px;">
+                        <button type="submit" class="btn add-cart" style="padding: 5px 10px; border: none; cursor: pointer;">🛒+</button>
+                    </form>
+                <?php else: ?>
+                    <span style="color: #dc3545; font-weight: bold;">Rupture</span>
+                <?php endif; ?>
+            </td>
             <?php if ($_SESSION['user']->uti_admin):
             ?>
             <td>

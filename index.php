@@ -2,6 +2,7 @@
 require_once 'controller/UtilisateurController.php';
 require_once 'controller/ProduitController.php';
 require_once 'controller/AuthController.php';
+require_once 'controller/PanierController.php';
 require_once __DIR__ . '/config/auth.php';
 
 $action = $_GET['action'] ?? null;
@@ -65,21 +66,47 @@ switch($action) {
         $subaction = $_GET['subaction'] ?? 'index';
         $id = $_GET['id'] ?? null;
         switch($subaction) {
-            case 'create': 
+            case 'create':
             requireAdmin(); // Vérifie si l'utilisateur est admin
-            $controller->create(); 
+            $controller->create();
             break;
-            case 'edit': 
+            case 'edit':
             requireAdmin(); // Vérifie si l'utilisateur est admin
-            $controller->edit($id); 
+            $controller->edit($id);
             break;
-            case 'delete': 
+            case 'delete':
             requireAdmin(); // Vérifie si l'utilisateur est admin
-            $controller->delete($id); 
+            $controller->delete($id);
             break;
-            default: 
-            $controller->index(); 
+            default:
+            $controller->index();
             break;
+        }
+        break;
+
+    case 'panier':
+        requireAuth(); // Vérifie si l'utilisateur est connecté
+        $controller = new PanierController();
+        $subaction = $_GET['subaction'] ?? 'index';
+        switch($subaction) {
+            case 'ajouter':
+                $controller->ajouter();
+                break;
+            case 'modifier':
+                $controller->modifier();
+                break;
+            case 'supprimer':
+                $controller->supprimer();
+                break;
+            case 'vider':
+                $controller->vider();
+                break;
+            case 'json':
+                $controller->getJson();
+                break;
+            default:
+                $controller->index();
+                break;
         }
         break;
 

@@ -44,6 +44,38 @@ INSERT INTO `web_m1_s1`.`t_produit_pro`
 ('Mobilier', 'Chaise de bureau ergonomique', 199.99, 15.00, '2025-11-01', 30, '');
 
 
+-- Table pour les paniers (un panier par utilisateur)
+CREATE TABLE `web_m1_s1`.`t_panier_pan` (
+    `pan_idpanier` INT NOT NULL AUTO_INCREMENT,
+    `pan_idutilisateur` INT NOT NULL,
+    `pan_date_creation` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `pan_date_modification` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`pan_idpanier`),
+    UNIQUE KEY `unique_user_cart` (`pan_idutilisateur`),
+    FOREIGN KEY (`pan_idutilisateur`) REFERENCES `web_m1_s1`.`t_utilisateur_uti`(`uti_idutilisateur`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Table pour les lignes du panier (produits dans le panier)
+CREATE TABLE `web_m1_s1`.`t_ligne_panier_lpa` (
+    `lpa_idligne` INT NOT NULL AUTO_INCREMENT,
+    `lpa_idpanier` INT NOT NULL,
+    `lpa_idproduit` INT NOT NULL,
+    `lpa_quantite` INT NOT NULL DEFAULT 1,
+    `lpa_prix_unitaire` DECIMAL(10,2) NOT NULL,
+    `lpa_promo` DECIMAL(5,2) DEFAULT 0.00,
+    `lpa_date_ajout` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`lpa_idligne`),
+    UNIQUE KEY `unique_product_in_cart` (`lpa_idpanier`, `lpa_idproduit`),
+    FOREIGN KEY (`lpa_idpanier`) REFERENCES `web_m1_s1`.`t_panier_pan`(`pan_idpanier`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+    FOREIGN KEY (`lpa_idproduit`) REFERENCES `web_m1_s1`.`t_produit_pro`(`pro_idproduit`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Le mdp est "password"
 INSERT INTO `web_m1_s1`.`t_utilisateur_uti`
 (`uti_login`, `uti_mdp`, `uti_idcompte`, `uti_mail`, `uti_admin`) VALUES
