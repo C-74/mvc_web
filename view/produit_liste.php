@@ -76,6 +76,28 @@
                     <!-- Pas de promo : prix normal -->
                     <?= number_format($row['pro_prix_ht'], 2, ',', ' ') ?> €
                 <?php endif; ?>
+                
+                <!-- Affichage de l'histo des prix -->
+                
+                        <br>
+                        <details>
+                            <summary style="cursor: pointer; background-color: #e9ecef; padding: 2px; border-radius: 3px;">
+                                Historique
+                            </summary>
+                            <?php while ($rowPrix = $historiquePrix->fetch(PDO::FETCH_ASSOC)) : ?>
+                                <?php if ($rowPrix['hpr_idproduit'] == $row['pro_idproduit']) : ?>
+                                 <div style="margin-top: 5px; padding: 5px; background-color: #f9f9f9; ">
+                                <small style="color: #333;">
+                                    <?=  number_format($rowPrix['hpr_prix_ht'], 2, ',', ' ') ?> €
+                                    <br>
+                                    le <?= date('d/m/Y à H:i', strtotime($rowPrix['hpr_date_modification'])) ?>
+                                </small>
+                                <?php endif; ?>
+                            <?php endwhile; ?>
+                            </div>
+                        </details>
+                        
+                
             </td>
 
 

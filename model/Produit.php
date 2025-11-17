@@ -17,6 +17,10 @@ class Produit {
         $this->conn = $db;
     }
 
+    public function getDbConnection() {
+        return $this->conn;
+    }
+
     public function lireTous() {
         $query = "SELECT * FROM " . $this->table . " ORDER BY pro_idproduit ASC";
         $stmt = $this->conn->prepare($query);

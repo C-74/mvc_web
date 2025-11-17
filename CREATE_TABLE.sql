@@ -23,6 +23,18 @@ CREATE TABLE `web_m1_s1`.`t_produit_pro` (
     PRIMARY KEY (`pro_idproduit`)
 ) ENGINE = InnoDB;
 
+-- Table historique pour l'historique des prix
+CREATE TABLE `web_m1_s1`.`t_historique_prix_hpr` (
+    `hpr_idhistorique` INT NOT NULL AUTO_INCREMENT,
+    `hpr_idproduit` INT NOT NULL,
+    `hpr_prix_ht` DECIMAL(10,2) NOT NULL,
+    `hpr_date_modification` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`hpr_idhistorique`),
+    FOREIGN KEY (`hpr_idproduit`) REFERENCES `web_m1_s1`.`t_produit_pro`(`pro_idproduit`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+) ENGINE = InnoDB;
+
 INSERT INTO `web_m1_s1`.`t_produit_pro`
 (`pro_type`, `pro_designation`, `pro_prix_ht`, `pro_promo`, `pro_date_arrive`, `pro_stock`, `pro_image`) VALUES
 ('Électronique', 'Smartphone Samsung Galaxy S24', 899.99, 10.00, '2025-10-15', 25, ''),

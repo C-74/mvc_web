@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../model/Produit.php';
+require_once __DIR__ . '/../model/Historique.php';
 
 class ProduitController {
     private $model;
@@ -13,6 +14,8 @@ class ProduitController {
 
     public function index() {
         $produits = $this->model->lireTous();
+        $historique = new Historique($this->model->getDbConnection());
+        $historiquePrix = $historique->lireTous();
         include __DIR__ . '/../view/produit_liste.php';
     }
 
@@ -92,6 +95,7 @@ class ProduitController {
         // Récupération du produit existant pour pré-remplir le formulaire
         $produit = $this->model->lireUn();
         $imageActuelle = $produit['pro_image'] ?? null;
+        $prixActuel = $produit['pro_prix_ht'] ?? null; 
 
         if ($_POST) {
             $type = trim($_POST['type']);
@@ -136,6 +140,14 @@ class ProduitController {
                 }
 
                 if ($erreur === '') {
+                    // Si le prix a changé, enregistrer dans l'historique
+                    if ($prix != $prixActuel) {
+                        $historiqueModel = new Historique($this->model->getDbConnection());
+                        $historiqueModel->hpr_idproduit = $id;
+                        $historiqueModel->hpr_prix_ht = $prixActuel;
+                        $historiqueModel->creer();
+                    }
+
                     $this->model->pro_type = $type;
                     $this->model->pro_designation = $designation;
                     $this->model->pro_prix_ht = $prix;
