@@ -1,3 +1,8 @@
+<?php
+$type = file_get_contents("typeProduits.json");
+$listType = json_decode($type, true);
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -21,17 +26,29 @@
         <div class="erreur"><?= htmlspecialchars($erreur) ?></div>
     <?php endif; ?>
 
-    <form method="POST" novalidate>
-        <label>Type :</label>
-        <input type="text" name="type" required value="<?= htmlspecialchars($produit['pro_type']) ?>">
+    <form method="POST" enctype="multipart/form-data" novalidate>
 
-        <label>Désignation :</label>
-        <input type="text" name="designation" required value="<?= htmlspecialchars($produit['pro_designation']) ?>">
+    <label>Désignation :</label>
+    <input type="text" name="designation" required value="<?= htmlspecialchars($produit['pro_designation']) ?>">
+
+    <label>Type :</label>
+    <select name="type" required>
+        <?php
+        foreach ($listType as $type) {
+            $selected = ($type['categorie'] === $produit['pro_type']) ? 'selected' : '';
+            echo '<option value="' . htmlspecialchars($type['categorie']) . '" ' . $selected . '>' . htmlspecialchars($type['categorie']) . '</option>';
+        }
+        ?>
+    </select>
 
         <label>Prix HT :</label>
         <input type="number" step="0.01" min="0.01" name="prix" id="prix" required 
             value="<?= $produit['pro_prix_ht'] ?>" 
             onblur="arrondirPrix(this)">
+
+        <label>Promotion (%) :</label>
+        <input type="number" step="0.01" min="0" max="100" name="promo"
+            value="<?= htmlspecialchars($produit['pro_promo'] ?? '') ?>">
 
         <script>
             function arrondirPrix(input) {
@@ -48,6 +65,13 @@
 
         <label>Stock :</label>
         <input type="number" name="stock" min="1" required value="<?= $produit['pro_stock'] ?>">
+
+        <?php if (!empty($produit['pro_image'])) : ?>
+            <p>Image actuelle : <?= htmlspecialchars($produit['pro_image']) ?></p>
+        <?php endif; ?>
+
+        <label>Nouvelle image (optionnelle) :</label>
+        <input type="file" name="image" accept="image/*">
 
         <br>
         

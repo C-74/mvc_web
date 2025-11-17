@@ -11,6 +11,7 @@ class Utilisateur {
     public $uti_mail;
     public $uti_date_creation;
     public $uti_date_connexion;
+    public $uti_admin;
 
     public function __construct($db) {
         $this->conn = $db;

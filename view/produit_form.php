@@ -3,9 +3,13 @@
 $type_val = $_POST['type'] ?? '';
 $designation_val = $_POST['designation'] ?? '';
 $prix_val = $_POST['prix'] ?? '';
+$promo_val = $_POST['promo'] ?? '';
 $date_arrive_val = $_POST['date_arrive'] ?? '';
 $stock_val = $_POST['stock'] ?? '';
+$type=file_get_contents("typeProduits.json");
+$listType=json_decode($type,true);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -30,17 +34,27 @@ $stock_val = $_POST['stock'] ?? '';
         <div class="erreur"><?= htmlspecialchars($erreur) ?></div>
     <?php endif; ?>
 
-    <form method="POST" novalidate>
-        <label>Type :</label>
-        <input type="text" name="type" required value="<?= htmlspecialchars($type_val) ?>">
-
+    <form method="POST" enctype="multipart/form-data" novalidate>
         <label>Désignation :</label>
         <input type="text" name="designation" required value="<?= htmlspecialchars($designation_val) ?>">
+
+        <label>Type :</label>
+        <select name="type" required>
+            <?php
+            foreach ($listType as $type) {
+                echo '<option value="' . htmlspecialchars($type['categorie']) . '">' . htmlspecialchars($type['categorie']) . '</option>';
+            }
+            ?>
+        </select>
 
         <label>Prix HT :</label>
         <input type="number" step="0.01" min="0.01" name="prix" id="prix" required 
             value="<?= htmlspecialchars($prix_val) ?>" 
             onblur="arrondirPrix(this)">
+
+        <label>Promotion (%) :</label>
+        <input type="number" step="0.01" min="0" max="100" name="promo"
+            value="<?= htmlspecialchars($promo_val) ?>">
 
         <script>
             function arrondirPrix(input) {
@@ -57,6 +71,9 @@ $stock_val = $_POST['stock'] ?? '';
 
         <label>Stock :</label>
         <input type="number" name="stock" min="1" required value="<?= htmlspecialchars($stock_val) ?>">
+
+        <label>Image (optionnelle) :</label>
+        <input type="file" name="image" accept="image/*">
 
         <br>
 
